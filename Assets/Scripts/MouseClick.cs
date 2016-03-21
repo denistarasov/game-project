@@ -4,6 +4,8 @@ using System.Collections;
 public class MouseClick : MonoBehaviour {
 
     private Vector2 click_coordinates;
+    public static int random_int;
+    private static GUIStyle random_int_style = new GUIStyle();
 
     void Update () {
         if (Input.GetButtonDown("Fire1")) {
@@ -28,9 +30,18 @@ public class MouseClick : MonoBehaviour {
             // Ищем зону
             int zone_number = FieldCreation.array_of_hexagons [coordinates_in_array];
             int owner_number = FieldCreation.belonging_to_player [FieldCreation.array_of_hexagons [coordinates_in_array] ];
-            
-            // Теперь ее владелец -- игрок
-            FieldCreation.belonging_to_player [zone_number] = 1;
+
+            // Запускаем рандом от 0 до 6 (потому что 7 -- невключительно)
+            // Если >= 3, то зона за игроком, иначе -- нет
+            // random_int нужно сделать public, чтобы использовать его в OnGUI()
+            random_int = Random.Range(0, 7);
+            if (random_int >= 3)
+                FieldCreation.belonging_to_player [zone_number] = 1;
         }
+    }
+
+    void OnGUI() {
+        random_int_style.fontSize = 100;
+        GUI.Label(new Rect(10, 10, 100, 20), random_int.ToString(), random_int_style);
     }
 }
