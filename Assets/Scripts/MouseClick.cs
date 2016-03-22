@@ -5,10 +5,19 @@ public class MouseClick : MonoBehaviour {
 
     private Vector2 click_coordinates;
     public static int random_int;
+    public static int current_player_number = 1;
+    public static int number_of_players = 2;
+    public static bool is_game_over = false;
+
+    // Стили
     private static GUIStyle random_int_style = new GUIStyle();
+    private static GUIStyle current_player_number_style = new GUIStyle();
+    private static GUIStyle game_over_style = new GUIStyle();
+    private static GUIStyle winner_number_style = new GUIStyle();
+
 
     void Update () {
-        if (Input.GetButtonDown("Fire1")) {
+        if (Input.GetButtonDown("Fire1") && !is_game_over) {
 
             // Находим место, куда кликнул игрок, точка отсчета -- левый нижний угол
             click_coordinates = Input.mousePosition;
@@ -31,17 +40,47 @@ public class MouseClick : MonoBehaviour {
             int zone_number = FieldCreation.array_of_hexagons [coordinates_in_array];
             int owner_number = FieldCreation.belonging_to_player [FieldCreation.array_of_hexagons [coordinates_in_array] ];
 
-            // Запускаем рандом от 0 до 6 (потому что 7 -- невключительно)
-            // Если >= 3, то зона за игроком, иначе -- нет
-            // random_int нужно сделать public, чтобы использовать его в OnGUI()
-            random_int = Random.Range(0, 7);
-            if (random_int >= 3)
-                FieldCreation.belonging_to_player [zone_number] = 1;
+            if (owner_number != current_player_number) {
+                // Запускаем рандом от 0 до 6 (потому что 7 -- невключительно)
+                // Если >= 3, то зона за игроком, иначе -- нет
+                // random_int нужно сделать public, чтобы использовать его в OnGUI()
+                random_int = Random.Range(0, 7);
+                if (random_int >= 3) {
+                    FieldCreation.belonging_to_player [zone_number] = current_player_number;
+                }
+                // Переход хода к следующему игроку
+                if (current_player_number == number_of_players)
+                    current_player_number = 1;
+                else
+                    ++current_player_number;
+            }
         }
+
+        // Проверка, захвачены ли все зоны одним игроком
+        // (код похож на костыль)
+        bool temp_flag = false;
+        int first_element = FieldCreation.belonging_to_player[0];
+        foreach (int element in FieldCreation.belonging_to_player) {
+            if (first_element != element)
+                temp_flag = true;
+        }
+        is_game_over = !temp_flag;
     }
 
     void OnGUI() {
+        // Отрисовка рандомоного числа
         random_int_style.fontSize = 100;
         GUI.Label(new Rect(10, 10, 100, 20), random_int.ToString(), random_int_style);
+        // Отрисовка номера текущего игрока
+        current_player_number_style.fontSize = 25;
+        GUI.Label(new Rect(630, 25, 100, 20), current_player_number.ToString() + " player's turn", current_player_number_style);
+        // Если игра завершена, то нужно вывести
+        // "GAME OVER" и номер победителя
+        if (is_game_over) {
+            game_over_style.fontSize = 50;
+            GUI.Label(new Rect(260, 320, 100, 20), "GAME OVER", game_over_style);
+            winner_number_style.fontSize = 30;
+            GUI.Label(new Rect(320, 390, 100, 20), "Player " + FieldCreation.belonging_to_player[0] + " won", winner_number_style);
+        }
     }
 }
