@@ -72,15 +72,17 @@ public class MouseClick : MonoBehaviour {
         random_int_style.fontSize = 100;
         GUI.Label(new Rect(10, 10, 100, 20), random_int.ToString(), random_int_style);
         // Отрисовка номера текущего игрока
-        current_player_number_style.fontSize = 25;
-        GUI.Label(new Rect(630, 25, 100, 20), current_player_number.ToString() + " player's turn", current_player_number_style);
+        if (!is_game_over) {
+            current_player_number_style.fontSize = 30;
+            GUI.Label(new Rect(630, 25, 100, 20), current_player_number.ToString() + " player's turn", current_player_number_style);
+        }
         // Если игра завершена, то нужно вывести
         // "GAME OVER" и номер победителя
         if (is_game_over) {
-            game_over_style.fontSize = 50;
-            GUI.Label(new Rect(260, 320, 100, 20), "GAME OVER", game_over_style);
+            game_over_style.fontSize = 100;
+            GUI.Label(new Rect(130, 100, 100, 20), "GAME OVER", game_over_style);
             winner_number_style.fontSize = 30;
-            GUI.Label(new Rect(320, 390, 100, 20), "Player " + FieldCreation.belonging_to_player[0] + " won", winner_number_style);
+            GUI.Label(new Rect(630, 25, 100, 20), "Player " + FieldCreation.belonging_to_player[0] + " won", winner_number_style);
         }
     }
 }
