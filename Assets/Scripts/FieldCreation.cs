@@ -25,8 +25,8 @@ public class FieldCreation : MonoBehaviour {
     // Разрешение будет 1024х768, соответственно делаем
     // размеры и количество клеток
     // Но пока сделаем его зависящим от размера клеток, а не наоборот
-    public static int res_horizontal = 2*shift_horizontally + cell_size * number_cells_x;
-    public static int res_vertical = 2*shift_vertically + cell_size * number_cells_y;
+    public static int res_horizontal = 2 * shift_horizontally + cell_size * number_cells_x;
+    public static int res_vertical = 2 * shift_vertically + cell_size * number_cells_y;
 
     // Создадим кнопки разных цветов
     private Texture square_button;
