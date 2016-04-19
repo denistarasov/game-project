@@ -7,7 +7,12 @@ public class MouseClick : MonoBehaviour {
     public static int random_int;
     public static int current_player_number = 1;
     public static int number_of_players = 2;
+
     public static bool is_game_over = false;
+    // Если true -- то захватывает зону
+    // Если false -- то выбирает свою зону, из которой будет захватывать
+    public static bool is_conquering = false;
+    public static int crossed_zone = -1;
 
     // Стили
     private static GUIStyle random_int_style = new GUIStyle();
@@ -40,7 +45,12 @@ public class MouseClick : MonoBehaviour {
             int zone_number = FieldCreation.array_of_hexagons [coordinates_in_array];
             int owner_number = FieldCreation.belonging_to_player [FieldCreation.array_of_hexagons [coordinates_in_array] ];
 
-            if (owner_number != current_player_number) {
+            if (owner_number == current_player_number && !is_conquering) {
+                crossed_zone = zone_number;
+                is_conquering = true;
+            }
+
+            if (owner_number != current_player_number && is_conquering) {
                 // Запускаем рандом от 0 до 6 (потому что 7 -- невключительно)
                 // Если >= 3, то зона за игроком, иначе -- нет
                 // random_int нужно сделать public, чтобы использовать его в OnGUI()
@@ -53,6 +63,8 @@ public class MouseClick : MonoBehaviour {
                     current_player_number = 1;
                 else
                     ++current_player_number;
+
+                is_conquering = false;
             }
         }
 

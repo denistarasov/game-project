@@ -33,6 +33,7 @@ public class FieldCreation : MonoBehaviour {
     private Texture red_square;
     private Texture green_square;
     private Texture white_square;
+    private Texture crossed_square;
     private Texture horizontal_border;
     private Texture vertical_border;
 
@@ -65,6 +66,7 @@ public class FieldCreation : MonoBehaviour {
         white_square = (Texture)Resources.Load("white_square");
         green_square = (Texture)Resources.Load("green_square");
         red_square = (Texture)Resources.Load("red_square");
+        crossed_square = (Texture)Resources.Load("crossed_square");
         horizontal_border = (Texture)Resources.Load("horizontal_border");
         vertical_border = (Texture)Resources.Load("vertical_border");
 
@@ -106,6 +108,15 @@ public class FieldCreation : MonoBehaviour {
                                        cell_size),
                              square_button
                             );
+
+            if (MouseClick.crossed_zone == array_of_hexagons[i]) {
+                GUI.DrawTexture (new Rect (shift_horizontally + cell_size * (i % number_cells_x),
+                                           shift_vertically + cell_size * (i / number_cells_x),
+                                           cell_size,
+                                           cell_size),
+                                 crossed_square
+                                );
+            }
         }
 
         // Рисуем границы поверх клеток
