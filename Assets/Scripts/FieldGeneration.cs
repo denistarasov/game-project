@@ -43,6 +43,17 @@ public class FieldGeneration : MonoBehaviour {
             }
             test_string += "\n";
         }
+        //Debug.Log(test_string);
+
+        // Проверим правильность neighborhood_graph
+        test_string = "";
+        for (int i = 0; i < FieldCreation.neighborhood_graph.Count; ++i) {
+            foreach (int j in FieldCreation.neighborhood_graph[i]) {
+                test_string += j + " ";
+            }
+            test_string += "\n";
+        }
+        Debug.Log(FieldCreation.neighborhood_graph.Count);
         Debug.Log(test_string);
     }
 

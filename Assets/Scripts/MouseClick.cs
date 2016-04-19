@@ -13,6 +13,7 @@ public class MouseClick : MonoBehaviour {
     // Если false -- то выбирает свою зону, из которой будет захватывать
     public static bool is_conquering = false;
     public static int crossed_zone = -1;
+    public static bool is_neighbor = false;
 
     // Стили
     private static GUIStyle random_int_style = new GUIStyle();
@@ -45,12 +46,21 @@ public class MouseClick : MonoBehaviour {
             int zone_number = FieldCreation.array_of_hexagons [coordinates_in_array];
             int owner_number = FieldCreation.belonging_to_player [FieldCreation.array_of_hexagons [coordinates_in_array] ];
 
+            // Текущий игрок выбирает зону, с которой будет ходить
             if (owner_number == current_player_number && !is_conquering) {
                 crossed_zone = zone_number;
                 is_conquering = true;
             }
 
-            if (owner_number != current_player_number && is_conquering) {
+            // Проверяем, что зона, куда будет ходить игрок,
+            // соседняя с той, откуда ходит игрок
+            is_neighbor = false;
+            if (FieldCreation.neighborhood_graph[crossed_zone].Contains(zone_number)) {
+                is_neighbor = true;
+            } 
+
+            // Текущий игрок пытается захватить соседнюю зону
+            if (owner_number != current_player_number && is_conquering && is_neighbor) {
                 // Запускаем рандом от 0 до 6 (потому что 7 -- невключительно)
                 // Если >= 3, то зона за игроком, иначе -- нет
                 // random_int нужно сделать public, чтобы использовать его в OnGUI()

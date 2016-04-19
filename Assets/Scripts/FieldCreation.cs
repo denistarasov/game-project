@@ -59,6 +59,10 @@ public class FieldCreation : MonoBehaviour {
     List<int> list_of_horizontal_borders = new List<int>();
     List<int> list_of_vertical_borders = new List<int>();
 
+    // Список смежности
+    public static List<HashSet <int> > neighborhood_graph = new List<HashSet <int> >();
+
+
     void Start () {
         // Разрешение выбрано так, чтобы поместилось поле и отображение "схватки",
         // т.е. отображение внизу рандомных чисел
@@ -70,6 +74,10 @@ public class FieldCreation : MonoBehaviour {
         horizontal_border = (Texture)Resources.Load("horizontal_border");
         vertical_border = (Texture)Resources.Load("vertical_border");
 
+        for (int i = 0; i < belonging_to_player.Length; i++) {
+            neighborhood_graph.Add(new HashSet<int>());
+        }
+
         // Найдем все клетки, снизу которых нужно поставить горизонтальную границу
         for (int i = 0; i < number_cells_x * number_cells_y; ++i) {
             // Проверка, на последнем ли ряду.
@@ -77,6 +85,11 @@ public class FieldCreation : MonoBehaviour {
             if (i < number_cells_x * number_cells_y - number_cells_x)
                 if (array_of_hexagons[i] != array_of_hexagons[i + number_cells_x]) {
                     list_of_horizontal_borders.Add(i + number_cells_x);
+                    // Добавляем в список смежности соседей
+                    int current_zone_number = array_of_hexagons[i];
+                    int neighbor_zone_number = array_of_hexagons[i + number_cells_x];
+                    neighborhood_graph[current_zone_number].Add(neighbor_zone_number);
+                    neighborhood_graph[neighbor_zone_number].Add(current_zone_number);
                 }
         }
 
