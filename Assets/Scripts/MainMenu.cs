@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour {
     void Start () {
         GetComponent<FieldCreation>().enabled = false;
         GetComponent<MouseClick>().enabled = false;
+        GetComponent<ConquerQuestions>().enabled = false;
         Screen.SetResolution(2 * FieldCreation.shift_horizontally + FieldCreation.cell_size * FieldCreation.number_cells_x, 2 * FieldCreation.shift_vertically + FieldCreation.cell_size * FieldCreation.number_cells_y + 200, false);
         play_button = (Texture)Resources.Load("play_button");
         main_title = (Texture)Resources.Load("main_title");
@@ -20,6 +21,7 @@ public class MainMenu : MonoBehaviour {
         if (Input.GetButtonDown("Fire1")) {
             GetComponent<FieldCreation>().enabled = true;
             GetComponent<MouseClick>().enabled = true;
+            GetComponent<ConquerQuestions>().enabled = true;
             GetComponent<MainMenu>().enabled = false;
         }
     }
