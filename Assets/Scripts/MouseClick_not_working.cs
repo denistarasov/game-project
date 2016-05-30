@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 using System.Collections;
 
@@ -21,6 +22,14 @@ public class MouseClick : MonoBehaviour {
     private static GUIStyle game_over_style = new GUIStyle();
     private static GUIStyle winner_number_style = new GUIStyle();
 
+// IEnumarator
+// StartCouroutine
+// yield new WaitForNextFrame();
+    IEnumerator WaitTwoSeconds(float waitTime) {
+        yield return new WaitForSeconds(waitTime);
+        GetComponent<ConquerQuestions>().enabled = false;
+        //print("WaitAndPrint " + Time.time);
+    }
 
     void Update () {
         if (Input.GetButtonDown("Fire1") && !is_game_over) {
@@ -41,40 +50,70 @@ public class MouseClick : MonoBehaviour {
 
             // А теперь эти же координаты -- но в массиве клеток поля
             int coordinates_in_array = (int)click_coordinates.y * FieldCreation.number_cells_x + (int)click_coordinates.x;
+            Debug.Log(coordinates_in_array);
 
             // Ищем зону
             int zone_number = FieldCreation.array_of_hexagons [coordinates_in_array];
             int owner_number = FieldCreation.belonging_to_player [FieldCreation.array_of_hexagons [coordinates_in_array] ];
+            Debug.Log("zone_number" + zone_number);
+            Debug.Log(owner_number);
 
-            // Текущий игрок выбирает зону, с которой будет ходить
-            if (owner_number == current_player_number && !is_conquering) {
-                crossed_zone = zone_number;
-                is_conquering = true;
-            }
-
-            // Проверяем, что зона, куда будет ходить игрок,
-            // соседняя с той, откуда ходит игрок
-            is_neighbor = false;
-            if (FieldCreation.neighborhood_graph[crossed_zone].Contains(zone_number)) {
-                is_neighbor = true;
-            } 
-
-            // Текущий игрок пытается захватить соседнюю зону
-            if (owner_number != current_player_number && is_conquering && is_neighbor) {
-                // Запускаем рандом от 0 до 6 (потому что 7 -- невключительно)
-                // Если >= 3, то зона за игроком, иначе -- нет
-                // random_int нужно сделать public, чтобы использовать его в OnGUI()
-                random_int = Random.Range(0, 7);
-                if (random_int >= 3) {
-                    FieldCreation.belonging_to_player [zone_number] = current_player_number;
+            // Ситуация: игрок тыкает на свою зону
+            if (owner_number == current_player_number) {
+                Debug.Log("HUIDASDFA");
+                // Если он тыкает в первый раз,
+                // то он выбирает зону, с которой атакует 
+                if (!is_conquering) {
+                    crossed_zone = zone_number;
+                    is_conquering = true;
+                    Debug.Log("CONQUER");
                 }
-                // Переход хода к следующему игроку
-                if (current_player_number == number_of_players)
-                    current_player_number = 1;
-                else
-                    ++current_player_number;
+                // Если тыкает в свою атакующую зону еще раз,
+                // то он ее "отжимает", т.е. она прекращает быть выбранной
+                if (is_conquering && crossed_zone == zone_number) {
+                    crossed_zone = -1;
+                    is_conquering = false;
+                }
+            } else if (owner_number != -1) {
+                // Проверяем, что зона, куда будет ходить игрок,
+                // соседняя с той, откуда ходит игрок
+                is_neighbor = false;
+                Debug.Log("NEIGHBOR");
+                if (FieldCreation.neighborhood_graph[crossed_zone].Contains(zone_number)) {
+                    is_neighbor = true;
+                }
 
-                is_conquering = false;
+                if (is_conquering && is_neighbor) {
+
+                    /*
+                    // Запускаем рандом от 0 до 6 (потому что 7 -- невключительно)
+                    // Если >= 3, то зона за игроком, иначе -- нет
+                    // random_int нужно сделать public, чтобы использовать его в OnGUI()
+                    random_int = Random.Range(0, 7);
+                    if (random_int >= 3) {
+                        FieldCreation.belonging_to_player [zone_number] = current_player_number;
+                    }
+                    */
+/*
+                    GetComponent<ConquerQuestions>().enabled = true;
+                    // Будем ждать, пока игрок не выберет
+                    // какой-нибудь вариант ответа на вопрос
+                    int chosen_answer = ConquerQuestions.chosen_answer;
+                    StartCoroutine(WaitTwoSeconds(10.0F));
+
+                    if (chosen_answer == 1) {
+                        FieldCreation.belonging_to_player [zone_number] = current_player_number;
+                    }
+                    
+
+                    // Переход хода к следующему игроку
+                    if (current_player_number == number_of_players)
+                        current_player_number = 1;
+                    else
+                        ++current_player_number;
+
+                    is_conquering = false;
+                }
             }
         }
 
@@ -108,3 +147,4 @@ public class MouseClick : MonoBehaviour {
         }
     }
 }
+*/
