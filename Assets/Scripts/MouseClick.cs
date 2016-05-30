@@ -4,7 +4,6 @@ using System.Collections;
 public class MouseClick : MonoBehaviour {
 
     private Vector2 click_coordinates;
-    public static int random_int;
     public static int current_player_number = 1;
     public static int number_of_players = 2;
 
@@ -16,7 +15,6 @@ public class MouseClick : MonoBehaviour {
     public static bool is_neighbor = false;
 
     // Стили
-    private static GUIStyle random_int_style = new GUIStyle();
     private static GUIStyle current_player_number_style = new GUIStyle();
     private static GUIStyle game_over_style = new GUIStyle();
     private static GUIStyle winner_number_style = new GUIStyle();
@@ -85,18 +83,15 @@ public class MouseClick : MonoBehaviour {
         bool temp_flag = false;
         int first_element = FieldCreation.belonging_to_player[0];
         foreach (int element in FieldCreation.belonging_to_player) {
-            if (first_element != element)
+            if (first_element != element && element != 0)
                 temp_flag = true;
         }
         is_game_over = !temp_flag;
     }
 
     void OnGUI() {
-        // Отрисовка рандомоного числа
-        random_int_style.fontSize = 100;
-        GUI.Label(new Rect(10, 10, 100, 20), random_int.ToString(), random_int_style);
         // Отрисовка номера текущего игрока
-        if (!is_game_over) {
+        if (!is_game_over && !MainMenu.is_main_menu) {
             current_player_number_style.fontSize = 30;
             GUI.Label(new Rect(630, 25, 100, 20), current_player_number.ToString() + " player's turn", current_player_number_style);
         }

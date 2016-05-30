@@ -6,6 +6,7 @@ public class MainMenu : MonoBehaviour {
 
     private Texture play_button;
     private Texture main_title;
+    public static bool is_main_menu = true;
 
     // Здесь будет код для главного меню
     void Start () {
@@ -23,12 +24,13 @@ public class MainMenu : MonoBehaviour {
             GetComponent<FieldCreation>().enabled = true;
             GetComponent<MouseClick>().enabled = true;
             GetComponent<ConquerQuestions>().enabled = true;
+            is_main_menu = false;
             GetComponent<MainMenu>().enabled = false;
         }
     }
 
     void OnGUI () {
-        GUI.DrawTexture (new Rect (0, 0, 800, 600), main_title);
+        GUI.DrawTexture (new Rect (0, 0, 1000, 750), main_title);
         GUI.DrawTexture (new Rect (500, 80, 150, 50), play_button);
     }
 }
