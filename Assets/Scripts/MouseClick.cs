@@ -50,6 +50,9 @@ public class MouseClick : MonoBehaviour {
             if (owner_number == current_player_number && !is_conquering) {
                 crossed_zone = zone_number;
                 is_conquering = true;
+            } else if (zone_number == crossed_zone && is_conquering) {
+                crossed_zone = -1;
+                is_conquering = false;
             }
 
             // Проверяем, что зона, куда будет ходить игрок,
@@ -60,14 +63,13 @@ public class MouseClick : MonoBehaviour {
             } 
 
             // Текущий игрок пытается захватить соседнюю зону
-            if (owner_number != current_player_number && is_conquering && is_neighbor) {
-                // Запускаем рандом от 0 до 6 (потому что 7 -- невключительно)
-                // Если >= 3, то зона за игроком, иначе -- нет
-                // random_int нужно сделать public, чтобы использовать его в OnGUI()
-                random_int = Random.Range(0, 7);
-                if (random_int >= 3) {
+            if (owner_number != current_player_number && is_conquering && is_neighbor && ConquerQuestions.is_answered) {
+                int chosen_answer = ConquerQuestions.chosen_answer;
+                if (chosen_answer == 1) {
                     FieldCreation.belonging_to_player [zone_number] = current_player_number;
                 }
+                ConquerQuestions.askNewQuestion();
+
                 // Переход хода к следующему игроку
                 if (current_player_number == number_of_players)
                     current_player_number = 1;
