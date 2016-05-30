@@ -62,11 +62,12 @@ public class MouseClick : MonoBehaviour {
 
             // Текущий игрок пытается захватить соседнюю зону
             if (owner_number != current_player_number && is_conquering && is_neighbor && ConquerQuestions.is_answered) {
-                int chosen_answer = ConquerQuestions.chosen_answer;
-                if (chosen_answer == 1) {
+                bool is_right_answer = ConquerQuestions.is_right_answer;
+                if (is_right_answer) {
                     FieldCreation.belonging_to_player [zone_number] = current_player_number;
                 }
                 ConquerQuestions.askNewQuestion();
+                ConquerQuestions.randomizeAnswerOrder();
 
                 // Переход хода к следующему игроку
                 if (current_player_number == number_of_players)
@@ -75,6 +76,7 @@ public class MouseClick : MonoBehaviour {
                     ++current_player_number;
 
                 is_conquering = false;
+                crossed_zone = -1;
             }
         }
 

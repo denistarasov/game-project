@@ -6,8 +6,9 @@ public class ConquerQuestions : MonoBehaviour {
 
     private Texture question;
 
-    public static int chosen_answer = 0;
+    public static bool is_right_answer = false;
     public static int random_question;
+    public static int random_answer;
     public static bool is_answered = false;
     private static GUIStyle question_style = new GUIStyle();
 
@@ -25,8 +26,14 @@ public class ConquerQuestions : MonoBehaviour {
         is_answered = false;
     }
 
+    public static void randomizeAnswerOrder() {
+        // Определяем, какой рандомный ответ где будет
+        random_answer = Random.Range(1, 3);
+    }
+
     void Start () {
         random_question = Random.Range(0, questions.GetLength(0));
+        randomizeAnswerOrder();
         question = (Texture)Resources.Load("blank_question_table");
     }
 
@@ -48,14 +55,15 @@ public class ConquerQuestions : MonoBehaviour {
                        question_style);
         }
 
+        // Проверка, какую из двух кнопок нажал игрок
         if (GUI.Button (new Rect (que_x_pos + 30, que_y_pos + 100, 100, 50), 
-                        questions[random_question, 1])) {
-            chosen_answer = 1;
+                        questions[random_question, random_answer])) {
+            is_right_answer = random_answer == 1 ? true : false;
             is_answered = true;
         }
         if (GUI.Button (new Rect (que_x_pos + 500 - 100 - 30, que_y_pos + 100, 100, 50),
-                        questions[random_question, 2])) {
-            chosen_answer = 2;
+                        questions[random_question, 3 - random_answer])) {
+            is_right_answer = random_answer == 1 ? true : false;
             is_answered = true;
         }
     }
